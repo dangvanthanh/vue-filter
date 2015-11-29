@@ -1,0 +1,28 @@
+*,
+*:before,
+*:after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	background: #cacece;
+	color: #444;
+}
+
+
+.books {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.search {
+	margin: 20px 0;
+}
+
+.search-textfield {
+	padding: 7px 10px;
+	width: 100%;
+}
