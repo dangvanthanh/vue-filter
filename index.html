@@ -7,22 +7,8 @@
 </head>
 <body>
 	<div id="app" class="app">
-		<div class="search">
-			<input type="text" class="search-textfield" placeholder="Find books..." v-model="books.searchTerm" @keyup="doSearch">
-		</div>
-		<ul class="books">
-			<li class="book-item" v-for="book in books.list">
-				<div class="book-thumb">
-					<img v-bind:src="book.volumeInfo.imageLinks.thumbnail" alt="">
-				</div>
-				<div class="book-content">
-					<h3 class="book-title">{{ book.volumeInfo.title }}</h3>
-				</div>
-			</li>
-		</ul>
+		<book></book>
 	</div>
-	<script src="node_modules/vue/dist/vue.js"></script>
-	<script src="node_modules/lodash/index.js"></script>
 	<script src="app.js"></script>
 </body>
 </html>

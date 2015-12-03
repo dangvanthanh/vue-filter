@@ -12,7 +12,7 @@ var app = new Vue({
 	ready: function() {
 		var self = this;
 
-		fetch('https://www.googleapis.com/books/v1/volumes?q=volumns:javascript')
+		fetch('https://www.googleapis.com/books/v1/volumes?q=volumns:javascript&maxResults=40')
 			.then(function(response) {
 				return response.json();
 			})
