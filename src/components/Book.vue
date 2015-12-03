@@ -10,9 +10,11 @@
 			<div class="book-content">
 				<h3 class="book-title">{{ book.volumeInfo.title }}</h3>
 				<div class="book-author">
-					By {{ book.volumeInfo.authors[0] }}
+					By <strong>{{ book.volumeInfo.authors[0] }}</strong>
 				</div>
-				<div class="book-description">{{ book.volumeInfo.description }}</div>
+				<div class="book-description">
+					{{ book.volumeInfo.description | truncate }}
+				</div>
 			</div>
 		</div>
 	</ul>
@@ -44,6 +46,15 @@
 					self.$set('books.all', response.items);
 					self.$set('books.list', response.items);
 				});
+		},
+
+		filters: {
+			truncate: function(v) {
+				if (v !== undefined) {
+					let newline = v.indexOf('.');
+					return newline > 0 ? v.slice(0, newline) : v;
+				}
+			}
 		},
 
 		methods: {
