@@ -4,7 +4,7 @@ import Book from './components/Book.vue';
 
 Vue.use(VueResource);
 
-var app = new Vue({
+const app = new Vue({
 	el: '#app',
 	components: {
 		book: Book

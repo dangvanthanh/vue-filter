@@ -17,10 +17,15 @@
 				</div>
 			</div>
 		</div>
-		<div class="pagination">
-			<a href="#" @click="previous">Previous</a>
-			<a href="#" @click="next">Next</a>
-		</div>
+		<ul class="pagination" v-show="pagination.pageNumbers.length > 1">
+			<li v-bind:class="{ 'disabled': pagination.currentPage === 1 }"><a href="#" @click="previous">Previous</a></li>
+			<template v-for="pageNumber in pagination.pageNumbers">
+				<li v-bind:class="{ 'active': pageNumber === pagination.currentPage }">
+					<a href="#" @click="page($event, pageNumber)">{{ pageNumber }}</a>
+				</li>
+			</template>
+			<li v-bind:class="{ 'disabled': pagination.currentPage === pagination.totalPages }"><a href="#" @click="next">Next</a></li>
+		</ul>
 	</div>
 </template>
 
@@ -71,16 +76,21 @@
 					})
 					.then(function(response) {
 						let bookList = response.items;
-						let chunk = _.chunk(bookList, self.pagination.perPage);
 
 						self.$set('books', bookList);
-						self.$set('paginationBooks', chunk);
-						console.log(self.paginationBooks);
-
-						self.$set('filteredBooks', chunk[0]);
-						self.$set('pagination.totalItems', bookList.length);
-						self.$set('pagination.totalPages', Math.ceil(bookList.length / self.pagination.perPage));
+						self.initSearch(bookList);
 					});
+			},
+
+			initSearch(list) {
+				let self = this;
+				let chunk = _.chunk(list, self.pagination.perPage);
+
+				self.$set('paginationBooks', chunk);
+				self.$set('filteredBooks', chunk[0]);
+				self.$set('pagination.totalItems', list.length);
+				self.$set('pagination.totalPages', Math.ceil(list.length / self.pagination.perPage));
+				self.$set('pagination.pageNumbers', _.range(1, self.pagination.totalPages + 1));
 			},
 
 			doSearch() {
@@ -94,23 +104,28 @@
 					});
 				}
 
-				self.$set('filteredBooks', filtered);
+				self.$set('pagination.currentPage', 1);
+				self.initSearch(filtered);
 			},
 
 			page(ev, page) {
 				ev.preventDefault();
+				var self = this;
+
+				self.$set('pagination.currentPage', page);
+				self.$set('filteredBooks', self.paginationBooks[page - 1]);
 			},
 
 			next(ev) {
 				ev.preventDefault();
 				var self = this;
 
-				if (self.pagination.currentPage > self.pagination.totalPages - 1) {
+				if (self.pagination.currentPage === self.pagination.totalPages) {
 					return;
 				}
 
 				self.$set('pagination.currentPage', self.pagination.currentPage + 1);
-				self.$set('filteredBooks', self.paginationBooks[self.pagination.currentPage]);
+				self.$set('filteredBooks', self.paginationBooks[self.pagination.currentPage - 1]);
 			},
 
 			previous(ev) {
@@ -122,7 +137,7 @@
 				}
 
 				self.$set('pagination.currentPage', self.pagination.currentPage - 1);
-				self.$set('filteredBooks', self.paginationBooks[self.pagination.currentPage]);
+				self.$set('filteredBooks', self.paginationBooks[self.pagination.currentPage - 1]);
 			}
 		}
 	}

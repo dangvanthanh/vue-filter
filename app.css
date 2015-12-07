@@ -6,6 +6,10 @@
 	box-sizing: border-box;
 }
 
+body {
+	background: #f9fcfe;
+}
+
 .search {
 	margin: 20px 0;
 }
@@ -74,4 +78,38 @@
 .book-title {
 	margin: 0 0 10px;
 	line-height: 1.1;
+}
+
+.pagination {
+	text-align: center;
+}
+
+.pagination li {
+	display: inline-block;
+	margin: 0 2px;
+}
+
+.pagination li.active a {
+	background: #1bbbef;
+	color: #fff;
+}
+
+.pagination li.disabled a {
+	border-color: #ccc;
+	color: #ccc;
+	cursor: default;
+	pointer-events: none;
+}
+
+.pagination a {
+	border: 1px solid #1bbbef;
+	border-radius: 2px;
+	color: #1bbbef;
+	display: block;
+	padding: 6px 12px;
+	text-align: center;
+	white-space: nowrap;
+	position: relative;
+	text-decoration: none;
+	transition: all .1s linear;
 }
