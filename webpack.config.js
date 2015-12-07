@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
 	entry: './src/app.js',
 	output: {
@@ -13,4 +15,23 @@ module.exports = {
 		presets: ['es2015'],
 		plugins: ['transform-runtime']
 	}
+}
+
+if (process.env.NODE_ENV === 'production') {
+	module.exports.output.filename = 'app.min.js',
+	module.exports.plugins = [
+		new webpack.DefinePlugin({
+			'process.env': {
+				NODE_ENV: 'production'
+			}
+		}),
+		new webpack.optimize.UglifyJsPlugin({
+			sourceMap: false,
+			compress: {
+				warnings: false
+			}
+		})
+	]
+} else {
+	module.exports.devtool = '#source-map';
 }

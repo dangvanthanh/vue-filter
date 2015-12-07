@@ -17,6 +17,11 @@
 
 .book {
 	margin-bottom: 25px;
+	display: inline-block;
+	vertical-align: top;
+	min-height: 1px;
+	margin-right: -.25em;
+	width: 50%;
 }
 
 .book-thumb,
