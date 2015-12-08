@@ -5,7 +5,7 @@
 	<div class="books">
 		<div class="book" v-for="book in filteredBooks">
 			<div class="book-thumb">
-				<img v-bind:src="book.volumeInfo.imageLinks.thumbnail" alt="">
+				<img :src="book.volumeInfo.imageLinks.thumbnail" alt="">
 			</div>
 			<div class="book-content">
 				<h3 class="book-title">{{ book.volumeInfo.title }}</h3>
@@ -18,13 +18,13 @@
 			</div>
 		</div>
 		<ul class="pagination" v-show="pagination.pageNumbers.length > 1">
-			<li v-bind:class="{ 'disabled': pagination.currentPage === 1 }"><a href="#" @click="previous">Previous</a></li>
+			<li :class="{ 'disabled': pagination.currentPage === 1 }"><a href="#" @click="previous">Previous</a></li>
 			<template v-for="pageNumber in pagination.pageNumbers">
-				<li v-bind:class="{ 'active': pageNumber === pagination.currentPage }">
+				<li :class="{ 'active': pageNumber === pagination.currentPage }">
 					<a href="#" @click="page($event, pageNumber)">{{ pageNumber }}</a>
 				</li>
 			</template>
-			<li v-bind:class="{ 'disabled': pagination.currentPage === pagination.totalPages }"><a href="#" @click="next">Next</a></li>
+			<li :class="{ 'disabled': pagination.currentPage === pagination.totalPages }"><a href="#" @click="next">Next</a></li>
 		</ul>
 	</div>
 </template>
