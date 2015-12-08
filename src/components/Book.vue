@@ -110,7 +110,7 @@
 
 			page(ev, page) {
 				ev.preventDefault();
-				var self = this;
+				let self = this;
 
 				self.$set('pagination.currentPage', page);
 				self.$set('filteredBooks', self.paginationBooks[page - 1]);
@@ -118,7 +118,7 @@
 
 			next(ev) {
 				ev.preventDefault();
-				var self = this;
+				let self = this;
 
 				if (self.pagination.currentPage === self.pagination.totalPages) {
 					return;
@@ -130,7 +130,7 @@
 
 			previous(ev) {
 				ev.preventDefault();
-				var self = this;
+				let self = this;
 
 				if (self.pagination.currentPage === 1) {
 					return;

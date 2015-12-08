@@ -113,3 +113,9 @@ body {
 	text-decoration: none;
 	transition: all .1s linear;
 }
+
+@media screen and (max-width: 768px) {
+	.book {
+		width: 100%;
+	}
+}
