@@ -1,6 +1,6 @@
 <template>
 	<div class="search">
-		<input type="text" class="search-textfield" placeholder="Find books..." v-model="searchTerm" @keyup="doSearch">
+		<input type="text" class="search-textfield" placeholder="Find book by title..." v-model="searchTerm" @keyup="doSearch">
 	</div>
 	<div class="books">
 		<div class="book" v-for="book in filteredBooks">
@@ -52,7 +52,7 @@
 		ready() {
 			let self = this;
 
-			self.fetchGooleBooks();
+			self.fetchGooleBooks('javascript');
 		},
 
 		filters: {
@@ -65,10 +65,10 @@
 		},
 
 		methods: {
-			fetchGooleBooks() {
+			fetchGooleBooks(searchTerm) {
 				let self = this;
 
-				const GOOGLEBOOK_URL = 'https://www.googleapis.com/books/v1/volumes?q=volumns:javascript&maxResults=40';
+				const GOOGLEBOOK_URL = 'https://www.googleapis.com/books/v1/volumes?q=volumns:'+ searchTerm +'&maxResults=40';
 
 				fetch(GOOGLEBOOK_URL)
 					.then(function(response) {
@@ -98,7 +98,7 @@
 
 				let filtered = self.books;
 
-				if (self.books.searchTerm !== '') {
+				if (self.searchTerm !== '') {
 					filtered = _.filter(self.books, function(book) {
 						return book.volumeInfo.title.toLowerCase().indexOf(self.searchTerm.toLowerCase()) !== -1;
 					});

@@ -18,11 +18,11 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV === 'production') {
-	module.exports.output.filename = 'app.min.js',
+	module.exports.output.filename = 'app.js',
 	module.exports.plugins = [
 		new webpack.DefinePlugin({
 			'process.env': {
-				NODE_ENV: 'production'
+				NODE_ENV: "'production'"
 			}
 		}),
 		new webpack.optimize.UglifyJsPlugin({
