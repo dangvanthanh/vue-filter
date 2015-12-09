@@ -56,7 +56,7 @@
 		},
 
 		filters: {
-			truncate: function(v) {
+			truncate(v) {
 				if (v !== undefined) {
 					let newline = v.indexOf('.');
 					return newline > 0 ? v.slice(0, newline) : v;
