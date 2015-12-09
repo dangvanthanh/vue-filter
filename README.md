@@ -8,7 +8,9 @@ Filter books with Vue.js from Google Books API
 
 ```
 npm install
+```
 
 Run application
+```
 npm run dev
 ```
