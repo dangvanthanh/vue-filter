@@ -1,31 +1,40 @@
 <template>
 	<div class="search">
-		<input type="text" class="search-textfield" placeholder="Find book by title..." v-model="searchTerm" @keyup="doSearch">
+		<input type="text" class="search-textfield" placeholder="Find book by title..." v-model="searchTerm" @keyup.enter="doSearch">
 	</div>
 	<div class="books">
-		<div class="book" v-for="book in filteredBooks">
-			<div class="book-thumb">
-				<img :src="book.volumeInfo.imageLinks.thumbnail" alt="">
-			</div>
-			<div class="book-content">
-				<h3 class="book-title">{{ book.volumeInfo.title }}</h3>
-				<div class="book-author">
-					By <strong>{{ book.volumeInfo.authors[0] }}</strong>
-				</div>
-				<div class="book-description">
-					{{ book.volumeInfo.description | truncate }}
-				</div>
+		<div class="spinner" v-if="isLoading">
+			<div class="spinner__loading">
+				<div class="spinner__dot spinner__dot--1"></div>
+				<div class="spinner__dot spinner__dot--2"></div>
+				<div class="spinner__dot spinner__dot--3"></div>
 			</div>
 		</div>
-		<ul class="pagination" v-show="pagination.pageNumbers.length > 1">
-			<li :class="{ 'disabled': pagination.currentPage === 1 }"><a href="#" @click="previous">Previous</a></li>
-			<template v-for="pageNumber in pagination.pageNumbers">
-				<li :class="{ 'active': pageNumber === pagination.currentPage }">
-					<a href="#" @click="page($event, pageNumber)">{{ pageNumber }}</a>
-				</li>
-			</template>
-			<li :class="{ 'disabled': pagination.currentPage === pagination.totalPages }"><a href="#" @click="next">Next</a></li>
-		</ul>
+		<div class="book-list" v-else>
+			<div class="book" v-for="book in filteredBooks">
+				<div class="book-thumb">
+					<img :src="book.volumeInfo.imageLinks.thumbnail" alt="">
+				</div>
+				<div class="book-content">
+					<h3 class="book-title">{{ book.volumeInfo.title }}</h3>
+					<div class="book-author" v-show="book.volumeInfo.authors != undefined">
+						By <strong>{{ book.volumeInfo.authors[0] }}</strong>
+					</div>
+					<div class="book-description">
+						{{ book.volumeInfo.description | truncate }}
+					</div>
+				</div>
+			</div>
+			<ul class="pagination" v-show="pagination.pageNumbers.length > 1">
+				<li :class="{ 'disabled': pagination.currentPage === 1 }"><a href="#" @click="previous">Previous</a></li>
+				<template v-for="pageNumber in pagination.pageNumbers">
+					<li :class="{ 'active': pageNumber === pagination.currentPage }">
+						<a href="#" @click="page($event, pageNumber)">{{ pageNumber }}</a>
+					</li>
+				</template>
+				<li :class="{ 'disabled': pagination.currentPage === pagination.totalPages }"><a href="#" @click="next">Next</a></li>
+			</ul>
+		</div>
 	</div>
 </template>
 
@@ -45,7 +54,8 @@
 					totalPages: 0,
 					totalItems: 0,
 					pageNumbers: []
-				}
+				},
+				isLoading: true
 			}
 		},
 
@@ -70,6 +80,8 @@
 
 				const GOOGLEBOOK_URL = 'https://www.googleapis.com/books/v1/volumes?q=volumns:'+ searchTerm +'&maxResults=40';
 
+				self.$set('isLoading', true);
+
 				fetch(GOOGLEBOOK_URL)
 					.then(function(response) {
 						return response.json();
@@ -79,6 +91,7 @@
 
 						self.$set('books', bookList);
 						self.initSearch(bookList);
+						self.$set('isLoading', false);
 					});
 			},
 
@@ -96,16 +109,10 @@
 			doSearch() {
 				let self = this;
 
-				let filtered = self.books;
-
 				if (self.searchTerm !== '') {
-					filtered = _.filter(self.books, function(book) {
-						return book.volumeInfo.title.toLowerCase().indexOf(self.searchTerm.toLowerCase()) !== -1;
-					});
+					self.$set('pagination.currentPage', 1);
+					self.fetchGooleBooks(self.searchTerm);
 				}
-
-				self.$set('pagination.currentPage', 1);
-				self.initSearch(filtered);
 			},
 
 			page(ev, page) {
