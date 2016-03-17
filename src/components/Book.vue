@@ -35,6 +35,9 @@
 				<li :class="{ 'disabled': pagination.currentPage === pagination.totalPages }"><a href="#" @click="next">Next</a></li>
 			</ul>
 		</div>
+		<div class="spinner spinner--text" v-if="msg !== ''">
+			<span v-text="msg"></span>
+		</div>
 	</div>
 </template>
 
@@ -55,7 +58,8 @@
 					totalItems: 0,
 					pageNumbers: []
 				},
-				isLoading: true
+				isLoading: true,
+				msg: ''
 			}
 		},
 
@@ -81,6 +85,7 @@
 				const GOOGLEBOOK_URL = 'https://www.googleapis.com/books/v1/volumes?q=volumns:'+ searchTerm +'&maxResults=40';
 
 				self.$set('isLoading', true);
+				self.$set('msg', '');
 
 				fetch(GOOGLEBOOK_URL)
 					.then(function(response) {
@@ -89,9 +94,14 @@
 					.then(function(response) {
 						let bookList = response.items;
 
+						if (!bookList) {
+							bookList = [];
+							self.$set('msg', 'The book can not found. Please search try again.');
+						}
+
+						self.$set('isLoading', false);
 						self.$set('books', bookList);
 						self.initSearch(bookList);
-						self.$set('isLoading', false);
 					});
 			},
 
